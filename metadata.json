@@ -1,0 +1,6 @@
+{
+  "name": "DedupCore - Duplicate File Detection System",
+  "description": "High-performance duplicate file detection and data structures visualizer using SHA-256 cryptographic hashing, multi-tiered filtering, Merkle trees, and hash maps.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
