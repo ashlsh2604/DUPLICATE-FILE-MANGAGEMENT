@@ -24,6 +24,7 @@ import { PipelineVisualizer } from './components/PipelineVisualizer';
 import { DataStructureLab } from './components/DataStructureLab';
 import { DuplicateResolver } from './components/DuplicateResolver';
 import { AlgorithmBenchmark } from './components/AlgorithmBenchmark';
+import { CBackendViewer } from './components/CBackendViewer';
 import { RealFileUploaderModal } from './components/RealFileUploaderModal';
 
 export default function App() {
@@ -185,6 +186,45 @@ export default function App() {
 
     setStats(finalStats);
     setIsProcessing(false);
+  };
+
+  // Run scan using the native C engine via Express API
+  const handleRunCBackendScan = async () => {
+    if (isProcessing) return;
+    setIsProcessing(true);
+    try {
+      const res = await fetch('/api/c-backend/benchmark', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ numFiles: files.length, avgMB: 3 }),
+      });
+      const data = await res.json();
+      if (data && data.stats) {
+        setStats({
+          totalFiles: data.stats.totalFiles,
+          totalSizeBytes: data.stats.totalSizeBytes,
+          processedFiles: data.stats.totalFiles,
+          sizeFilteredOut: data.stats.sizeFilteredOut,
+          partialFilteredOut: data.stats.partialFilteredOut,
+          fullHashEvaluated: data.stats.fullHashEvaluated,
+          duplicateGroupsCount: data.stats.duplicateGroupsCount,
+          duplicateFilesCount: data.stats.duplicateFilesCount,
+          wastedSizeBytes: data.stats.wastedSizeBytes,
+          bytesReadEstimate: data.stats.bytesReadEstimate,
+          bytesSavedEstimate: data.stats.bytesSavedEstimate,
+          elapsedMs: data.stats.elapsedMs,
+        });
+
+        if (data.files && Array.isArray(data.files)) {
+          setFiles(data.files);
+        }
+        setCurrentStage('completed');
+      }
+    } catch (err) {
+      console.error('C backend scan error:', err);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   // Reset pipeline
@@ -375,6 +415,7 @@ export default function App() {
             selectedPreset={selectedPreset}
             onSelectPreset={loadPreset}
             onRunFullPipeline={handleRunFullPipeline}
+            onRunCBackend={handleRunCBackendScan}
             onStepForward={handleStepForward}
             onReset={handleResetPipeline}
             onViewDuplicates={() => setActiveTab('resolver')}
@@ -400,6 +441,10 @@ export default function App() {
 
         {activeTab === 'benchmarks' && (
           <AlgorithmBenchmark />
+        )}
+
+        {activeTab === 'c_backend' && (
+          <CBackendViewer />
         )}
       </main>
 

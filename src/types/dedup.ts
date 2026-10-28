@@ -88,6 +88,6 @@ export interface BloomFilterMetric {
   theoreticalFalsePositiveRate: number;
 }
 
-export type ViewTab = 'detector' | 'data_structures' | 'resolver' | 'benchmarks';
+export type ViewTab = 'detector' | 'data_structures' | 'resolver' | 'benchmarks' | 'c_backend';
 
 export type DatasetPreset = 'monorepo' | 'photographer' | 'office' | 'synthetic';

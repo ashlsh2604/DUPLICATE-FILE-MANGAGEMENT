@@ -31,6 +31,7 @@ interface PipelineVisualizerProps {
   selectedPreset: DatasetPreset;
   onSelectPreset: (preset: DatasetPreset) => void;
   onRunFullPipeline: () => void;
+  onRunCBackend?: () => void;
   onStepForward: () => void;
   onReset: () => void;
   onViewDuplicates: () => void;
@@ -46,6 +47,7 @@ export const PipelineVisualizer: React.FC<PipelineVisualizerProps> = ({
   selectedPreset,
   onSelectPreset,
   onRunFullPipeline,
+  onRunCBackend,
   onStepForward,
   onReset,
   onViewDuplicates,
@@ -142,6 +144,18 @@ export const PipelineVisualizer: React.FC<PipelineVisualizerProps> = ({
               <Play className="w-3.5 h-3.5 fill-emerald-400 text-emerald-400" />
               <span>{currentStage === 'completed' ? 'Re-run Deduplication' : 'Run Full Pipeline'}</span>
             </button>
+
+            {onRunCBackend && (
+              <button
+                onClick={onRunCBackend}
+                disabled={isProcessing}
+                className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-emerald-950 bg-emerald-400 hover:bg-emerald-300 rounded-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-2xs whitespace-nowrap"
+                title="Execute using compiled GCC native C engine"
+              >
+                <Cpu className="w-3.5 h-3.5" />
+                <span>Run via C Backend</span>
+              </button>
+            )}
 
             <button
               onClick={onReset}

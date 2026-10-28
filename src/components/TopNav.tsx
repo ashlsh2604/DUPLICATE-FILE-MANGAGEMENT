@@ -72,6 +72,17 @@ export const TopNav: React.FC<TopNavProps> = ({
         >
           Complexity Benchmarks
         </button>
+        <button
+          onClick={() => onTabChange('c_backend')}
+          className={`transition-colors whitespace-nowrap shrink-0 py-1 border-b-2 flex items-center gap-1.5 ${
+            activeTab === 'c_backend'
+              ? 'border-emerald-600 text-emerald-800 font-semibold'
+              : 'border-transparent text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+          <span>C Backend Engine</span>
+        </button>
       </nav>
 
       {/* Zone 3: 1 primary action */}
